@@ -1,0 +1,152 @@
+<!doctype html>
+<html lang="en">
+
+<head>
+
+    <!-- Webpage Title -->
+    <title>Seoul For You</title>
+
+    <!-- Required meta tags -->
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+
+    <!-- Bootstrap CSS -->
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css"
+        integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+
+    <!-- JS -->
+    <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.4.1/jquery.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.12.9/umd/popper.min.js"
+        integrity="sha384-ApNbgh9B+Y1QKtv3Rn7W3mgPxhU9K/ScQsAP7hUibX39j7fakFPskvXusvfa0b4Q"
+        crossorigin="anonymous"></script>
+    <script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/js/bootstrap.min.js"
+        integrity="sha384-JZR6Spejh4U02d8jOt6vLEHfe/JQGiRRSQQxSfFWpi1MquVdAyjUar5+76PVCmYl"
+        crossorigin="anonymous"></script>
+
+    <link rel="stylesheet" href="{{ url_for('static', filename='style.css') }}">
+    <!-- HTML에 이 부분을 추가하고 -->
+    <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital@0;1&display=swap" rel="stylesheet">
+
+    <style>
+        .form-inline {
+            margin: auto;
+        }
+
+        h1 {
+            text-align: center;
+        }
+
+        div.tag-wrapper {
+            text-align: center;
+            width: 200;
+        }
+
+        .tag-wrapper>button {
+            margin: 5px;
+        }
+
+        #detail {
+            display: none;
+            text-align: center;
+        }
+    </style>
+
+    <script>
+        $(document).ready(function () { // 페이지 로드되면 실행
+            add_tags()
+        })
+        let tags = ['Noodle', 'Bicycle', 'Museum', 'Hanok', 'Spa', 'Chicken', 'Local Market', 'Hiking',
+            'Cafe', 'Hanriver', 'Chill', 'BBQ', 'Drinking', 'Octupus', 'Street Food', 'Nightview']
+
+        let img_links = {
+            'Noodle': 'https://www.google.com/maps/place/Myeongdong+Kyoja/@37.5625266,126.985609,3a,75y,90t/data=!3m8!1e2!3m6!1sAF1QipMZGVugxK2QfZJweqSTmwLN2yIjpAtGfZquQ1TI!2e10!3e12!6s%2F%2Flh4.googleusercontent.com%2F-qKtntWi54DQ%2FW8RFpQ145MI%2FAAAAAAAAAEE%2Fj24iFXdo4pkwzkaR1adlb5hSTaql5JfNwCLIBGAYYCw%2Fw397-h298-k-no%2F!7i4032!8i3024!4m7!3m6!1s0x357ca2f00d41b15b:0x7d50d5b6b0623a1d!8m2!3d37.5625266!4d126.985609!14m1!1BCgIYIA',
+            'Bicycle': 'https://www.google.com/maps/place/Ichon+Hangang+Riverside+Park/@37.5159703,126.9736427,17z/data=!3m1!4b1!4m5!3m4!1s0x357ca18cadbeb22d:0xd408ea3e1cd48f28!8m2!3d37.5159703!4d126.9758314',
+            'Museum': 'https://www.google.com/maps/place/National+Museum+of+Modern+and+Contemporary+Art+-+Seoul/@37.5794091,126.9781804,17z/data=!3m1!4b1!4m5!3m4!1s0x357ca2c14dacd53d:0x205c23120e574816!8m2!3d37.5794091!4d126.9803691',
+            'Hanok': 'https://www.google.com/maps/place/Bukchon+Hanok+Village/@37.5824075,126.9814644,17z/data=!3m1!4b1!4m5!3m4!1s0x357ca2daaff8c14f:0xcdbcbaa9ffc9e59a!8m2!3d37.5824075!4d126.9836531',
+            'Spa': 'https://www.google.com/maps/place/Siloam+Bulgama+Sauna+Spa/@37.5577046,126.9664209,17z/data=!3m1!4b1!4m5!3m4!1s0x357ca263b98a473d:0xe869f0017791cd4f!8m2!3d37.5577046!4d126.9686096',
+            'Chicken': 'https://www.google.com/maps/place/%EA%B5%90%EC%B4%8C%EC%B9%98%ED%82%A8+%EC%88%99%EB%8C%80%EC%A0%90/@37.5465598,126.968225,16.9z/data=!4m8!1m2!2m1!1skyochon+chicken+sukmyeong!3m4!1s0x0:0xf01a888b036fd57a!8m2!3d37.5449112!4d126.9696862'
+        
+        // 치킨 이어서 map link 다 여기 받아오기
+        }
+
+        function add_tags() {
+            $('.tag-wrapper').empty();
+            for (let i = 0; i < tags.length; i++) {
+                if (i % 2) {
+                    tag_span_html = '<button type="button" class="btn btn-light" onclick="show_detail(\'' + tags[i] + '\')">#' + tags[i] + '</button>'
+                } else {
+                    tag_span_html = '<button type="button" class="btn btn-dark" onclick="show_detail(\'' + tags[i] + '\')">#' + tags[i] + '</button>'
+                }
+                $('.tag-wrapper').append(tag_span_html);
+
+            }
+        }
+
+        function show_detail(category) {
+            // not showing -> show detail
+            if ($("#detail").css('display') == 'none') {
+                $("#detail-category").text(category);
+                $('#detail > a').attr('href', img_links[category]);
+                $('#detail > a > img').attr('src', '/static/img/map-' + category + '.png');
+                $('#detail').show();
+            } else { // showing -> hide detail
+                $('#detail').hide();
+            }
+
+
+        }
+
+
+    </script>
+</head>
+
+<body>
+    <br />
+    <h1>Seoul For You</h1>
+    <br />
+
+    <div>
+        <nav class="navbar navbar-light">
+            <form class="form-inline">
+                <input class="form-control mr-sm-2" type="Search" placeholder="What's up?" aria-label="Search">
+                <button type="button" class="btn btn-light">Search</button>
+            </form>
+        </nav>
+    </div>
+    <br />
+    <div class="tag-wrapper">
+        <span class="badge badge-light">Light</span>
+        <span class="badge badge-dark">Dark</span>
+        <span class="badge badge-light">Light</span>
+        <span class="badge badge-dark">Dark</span>
+        <span class="badge badge-light">Light</span>
+        <span class="badge badge-dark">Dark</span>
+        <span class="badge badge-light">Light</span>
+
+        <br />
+        <span class="badge badge-light">Light</span>
+        <span class="badge badge-dark">Dark</span>
+        <span class="badge badge-light">Light</span>
+        <span class="badge badge-dark">Dark</span>
+        <span class="badge badge-light">Light</span>
+        <span class="badge badge-dark">Dark</span>
+        <span class="badge badge-light">Light</span>
+        <br />
+    </div>
+
+    <div id="detail">
+        <div> Noodle </div>
+        <div>Myeondong Kyoja</div>
+        <div>Noodle price 9,000KRW </div>
+        <span class="badge badge-light">like</span>
+        <div id="detail-category"></div>
+        <a href="/">
+            <img src="/static/img/map-noodle.png" />
+        </a>
+
+
+    </div>
+
+</body>
+
+</html>
