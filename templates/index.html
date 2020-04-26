@@ -42,12 +42,15 @@
         }
 
         .tag-wrapper>button {
-            margin: 5px;
+            margin: 20px;
+            /* Q.사이즈도 크게 하고 싶은데 size:20px 이렇게 하면 적용이 안됨*/
+            /* padding: 5px 0 0 5px; */
         }
 
         #detail {
             display: none;
             text-align: center;
+            font-size: 25px;
         }
     </style>
 
@@ -56,7 +59,7 @@
             add_tags()
         })
         let tags = ['Noodle', 'Bicycle', 'Museum', 'Hanok', 'Spa', 'Chicken', 'Local Market', 'Hiking',
-            'Cafe', 'Hanriver', 'Chill', 'BBQ', 'Drinking', 'Octupus', 'Street Food', 'Nightview']
+            'Cafe', 'Hanriver', 'Hotteok', 'Chill', 'BBQ', 'Bibimbap', 'Octupus', 'Nightview']
 
         let img_links = {
             'Noodle': 'https://www.google.com/maps/place/Myeongdong+Kyoja/@37.5625266,126.985609,3a,75y,90t/data=!3m8!1e2!3m6!1sAF1QipMZGVugxK2QfZJweqSTmwLN2yIjpAtGfZquQ1TI!2e10!3e12!6s%2F%2Flh4.googleusercontent.com%2F-qKtntWi54DQ%2FW8RFpQ145MI%2FAAAAAAAAAEE%2Fj24iFXdo4pkwzkaR1adlb5hSTaql5JfNwCLIBGAYYCw%2Fw397-h298-k-no%2F!7i4032!8i3024!4m7!3m6!1s0x357ca2f00d41b15b:0x7d50d5b6b0623a1d!8m2!3d37.5625266!4d126.985609!14m1!1BCgIYIA',
@@ -64,9 +67,22 @@
             'Museum': 'https://www.google.com/maps/place/National+Museum+of+Modern+and+Contemporary+Art+-+Seoul/@37.5794091,126.9781804,17z/data=!3m1!4b1!4m5!3m4!1s0x357ca2c14dacd53d:0x205c23120e574816!8m2!3d37.5794091!4d126.9803691',
             'Hanok': 'https://www.google.com/maps/place/Bukchon+Hanok+Village/@37.5824075,126.9814644,17z/data=!3m1!4b1!4m5!3m4!1s0x357ca2daaff8c14f:0xcdbcbaa9ffc9e59a!8m2!3d37.5824075!4d126.9836531',
             'Spa': 'https://www.google.com/maps/place/Siloam+Bulgama+Sauna+Spa/@37.5577046,126.9664209,17z/data=!3m1!4b1!4m5!3m4!1s0x357ca263b98a473d:0xe869f0017791cd4f!8m2!3d37.5577046!4d126.9686096',
-            'Chicken': 'https://www.google.com/maps/place/%EA%B5%90%EC%B4%8C%EC%B9%98%ED%82%A8+%EC%88%99%EB%8C%80%EC%A0%90/@37.5465598,126.968225,16.9z/data=!4m8!1m2!2m1!1skyochon+chicken+sukmyeong!3m4!1s0x0:0xf01a888b036fd57a!8m2!3d37.5449112!4d126.9696862'
-        
-        // 치킨 이어서 map link 다 여기 받아오기
+            'Chicken': 'https://www.google.com/maps/place/%EA%B5%90%EC%B4%8C%EC%B9%98%ED%82%A8+%EC%88%99%EB%8C%80%EC%A0%90/@37.5465598,126.968225,16.9z/data=!4m8!1m2!2m1!1skyochon+chicken+sukmyeong!3m4!1s0x0:0xf01a888b036fd57a!8m2!3d37.5449112!4d126.9696862',
+            'Local Market': 'https://www.google.com/maps/place/Namdaemun+Market/@37.5591786,126.9776692,3a,75y,90t/data=!3m8!1e2!3m6!1sAF1QipMfEc07VWtsDplVV21ECe0uLuv2r27ivFf-lvc4!2e10!3e12!6shttps:%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipMfEc07VWtsDplVV21ECe0uLuv2r27ivFf-lvc4%3Dw203-h152-k-no!7i4032!8i3024!4m8!1m2!2m1!1slocal+market!3m4!1s0x357ca2f516e5887d:0xcd371b16a3ec2061!8m2!3d37.5591786!4d126.9776692',
+            'Hiking': 'https://www.google.com/maps/place/%EB%B6%81%ED%95%9C%EC%82%B0%EA%B5%AD%EB%A6%BD%EA%B3%B5%EC%9B%90/@37.6197679,126.9955839,3a,75y,90t/data=!3m8!1e2!3m6!1sAF1QipNr-91A-CSFCr7UGultUAPJ-LKfrHzKNDyt72pI!2e10!3e12!6shttps:%2F%2Flh5.googleusercontent.com%2Fp%2FAF1QipNr-91A-CSFCr7UGultUAPJ-LKfrHzKNDyt72pI%3Dw129-h86-k-no!7i4912!8i3264!4m8!1m2!2m1!1shiking!3m4!1s0x357ca2ed7e746c37:0x68d84df978e285!8m2!3d37.6197679!4d126.9955839',
+            'Cafe': 'https://www.google.com/maps/place/Piknic/@37.556964,126.9775481,19z/data=!3m1!4b1!4m12!1m6!3m5!1s0x357ca25f810acd4f:0x51307241f2387f1!2sPiknic!8m2!3d37.5569629!4d126.9780953!3m4!1s0x357ca25f810acd4f:0x51307241f2387f1!8m2!3d37.5569629!4d126.9780953',
+            'Hanriver': 'https://www.google.com/maps/place/Banpo+Hangang+Park/@37.5097812,126.994744,17z/data=!4m12!1m6!3m5!1s0x357ca181c26b3b43:0x7de20867ce5d59f6!2sBanpo+Hangang+Park!8m2!3d37.5097812!4d126.994744!3m4!1s0x357ca181c26b3b43:0x7de20867ce5d59f6!8m2!3d37.5097812!4d126.994744',
+            'Hotteok': 'https://www.google.com/maps/place/%EB%82%A8%EB%8C%80%EB%AC%B8+%EC%95%BC%EC%B1%84+%ED%98%B8%EB%96%A1/@37.560667,126.977295,14z/data=!4m8!1m2!2m1!1zbmFtZGFlbXVuIG1hcmtldCDslbzssYQ!3m4!1s0x357ca2f4ec0664e3:0x9a9da3ccc6297ed3!8m2!3d37.560667!4d126.977295',
+            'Chill': 'https://www.google.com/maps/place/Casa+Corona+Seoul+Rooftop+Bar+%26+Lounge/@37.5340444,126.9939695,19z/data=!3m1!4b1!4m12!1m6!3m5!1s0x357ca31106ea9a21:0x27e7037c547e641!2sCasa+Corona+Seoul+Rooftop+Bar+%26+Lounge!8m2!3d37.5340433!4d126.9945167!3m4!1s0x357ca31106ea9a21:0x27e7037c547e641!8m2!3d37.5340433!4d126.9945167',
+            'BBQ': 'https://www.google.com/maps/place/Hanam+Pig/@37.5621049,126.9766419,16z/data=!4m8!1m2!2m1!1shanam+pig+city!3m4!1s0x0:0xc09102bbc631e087!8m2!3d37.5621054!4d126.9766425',
+            'Bibimbap': 'https://www.google.com/maps/place/Mongmyeok+Sanbang/@37.5580879,126.9868818,17z/data=!4m18!1m9!3m8!1s0x357ca2f7e94d5ec7:0x708b5f14f904b99!2sMongmyeok+Sanbang!5m2!4m1!1i2!8m2!3d37.5580879!4d126.9868818!3m7!1s0x357ca2f7e94d5ec7:0x708b5f14f904b99!5m2!4m1!1i2!8m2!3d37.5580879!4d126.9868818',
+            'Octupus': 'https://www.google.com/maps/place/Gwangjang+Market/@37.5701527,126.9993404,17z/data=!4m12!1m6!3m5!1s0x357ca2ed7e74759b:0xd656a34831089f44!2sGwangjang+Market!8m2!3d37.5701527!4d126.9993404!3m4!1s0x357ca2ed7e74759b:0xd656a34831089f44!8m2!3d37.5701527!4d126.9993404',
+            'Night view': 'https://www.google.com/maps/place/N+Seoul+Tower/@37.5511694,126.9882266,17z/data=!4m12!1m6!3m5!1s0x357ca257a88e6aa9:0x5cf8577c2e7982a5!2sN+Seoul+Tower!8m2!3d37.5511694!4d126.9882266!3m4!1s0x357ca257a88e6aa9:0x5cf8577c2e7982a5!8m2!3d37.5511694!4d126.9882266'
+
+        }
+
+        let image_desc = {
+            'noodle': 'Myeongdong Kyoja is a noodle restaurant located near Myeongdong Cathedral that has been in business from 1966. '
         }
 
         function add_tags() {
@@ -135,15 +151,14 @@
     </div>
 
     <div id="detail">
+        <a href="/">
+            <img src="/static/img/map-noodle.png" />
+        </a>
         <div> Noodle </div>
         <div>Myeondong Kyoja</div>
         <div>Noodle price 9,000KRW </div>
         <span class="badge badge-light">like</span>
-        <div id="detail-category"></div>
-        <a href="/">
-            <img src="/static/img/map-noodle.png" />
-        </a>
-
+        <!-- <div id="detail-category"></div> -->
 
     </div>
 
