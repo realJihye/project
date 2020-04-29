@@ -81,9 +81,44 @@
 
         }
 
-        let image_desc = {
-            'noodle': 'Myeongdong Kyoja is a noodle restaurant located near Myeongdong Cathedral that has been in business from 1966. '
-        }
+        // let img_desc = {
+        //     'Noodle': 'Myeongdong Kyoja is a noodle restaurant located near Myeongdong Cathedral that has been in business from 1966. Michelin star 2020 / 2019 / 2018 / 2017 '
+        //     'Bicycle' : 'Try Seoul Public Bike, Ttareungyi. Seoul Public Bike, Ttareungyi is an un- manned rental system that can be conveniently used anywhere, anytime by anyone.',
+        //     'Museum': '',
+        //     'Hanok': '',
+        //     'Spa': '',
+        //     'Chicken': 'Korean fried chicken differs from typical American fried chicken because it is fried twice; the skin is therefore crunchier and less greasy. Pickled radishes and beer (or carbonated drink) are often served with Korean fried chicken.',
+        //     'Local Market': '',
+        //     'Hiking': '',
+        //     'Cafe': 'Opened in 1964, Namdaemun Market is the largest traditional market in Korea with shops selling various goods.',
+        //     'Hanriver': '',
+        //     'Hotteok': '',
+        //     'Chill': '',
+        //     'BBQ': '',
+        //     'Bibimbap': '',
+        //     'Octupus': '',
+        //     'Night view': ''
+        // }
+
+        // let comment = {
+        //     'Noodle': 'Jihye Comment : the restaurant’s signature Kimchi can be too spicy and strong for you. Baby-size steamed rice, and extra noodles are unlimted '
+        //     'Bicycle' : 'Try Seoul Public Bike, Ttareungyi. Seoul Public Bike, Ttareungyi is an un- manned rental system that can be conveniently used anywhere, anytime by anyone.',
+        //     'Museum': '',
+        //     'Hanok': '',
+        //     'Spa': 'Jihye Comment : Please try it for me if you are find with a public bath (I’ve never tried here!)',
+        //     'Chicken': 'Jihye Comment : 10 out of 10 ! I think this chicken brand is the one of the best Korean fried Chicken. Sweet and Salty Perfect! Yum!'
+        //     'Local Market': 'Jihye Comment : I take friends here often because it is close to my work and Nam-san. Street food is cheaper than Myeongdong side. You can get fresh season fruits from wholesalers ',
+        //     'Hiking': '',
+        //     'Cafe': 'Jihye Comment : ‘instagrammable spot’ first floor is cafe and upper floors are all gallery (have to pay entrance fee) Drinks and cakes are 1.5 times expensive than others but cheese cake is really worthy to try (I bet!) There is a magnificent speaker and sound is just so different. If you like to listen to music, come join me. Let’s hit the music!',
+        //     'Hanriver': '',
+        //     'Hotteok': '',
+        //     'Chill': '',
+        //     'BBQ': '',
+        //     'Bibimbap': '',
+        //     'Octupus': '',
+        //     'Night view': ''
+
+        // }
 
         function add_tags() {
             $('.tag-wrapper').empty();
@@ -101,16 +136,39 @@
         function show_detail(category) {
             // not showing -> show detail
             if ($("#detail").css('display') == 'none') {
+                $.ajax({
+                    type: "get",
+                    url: "/api/likes",
+                    data: { 'category': category },
+                    success: function (response) {
+                        console.log(response)
+                        $('#likes').text(response['like']);
+                    }
+                });
                 $("#detail-category").text(category);
                 $('#detail > a').attr('href', img_links[category]);
                 $('#detail > a > img').attr('src', '/static/img/map-' + category + '.png');
+                $('#detail-title').text(category)
+                $('#detail-desc').text(img_desc[category]);
+                $('#detail-comment').text(comment[category]);
+                $('#detail > button').attr('onclick', 'like(\'' + category + '\'');
                 $('#detail').show();
             } else { // showing -> hide detail
                 $('#detail').hide();
             }
-
-
         }
+
+        function like(category) {
+            $.ajax({
+                type: "post",
+                url: "/api/likes",
+                data: { 'category': category },
+                success: function (response) {
+                    console.log(response)
+                }
+            });
+        }
+
 
 
     </script>
@@ -154,10 +212,12 @@
         <a href="/">
             <img src="/static/img/map-noodle.png" />
         </a>
-        <div> Noodle </div>
-        <div>Myeondong Kyoja</div>
-        <div>Noodle price 9,000KRW </div>
-        <span class="badge badge-light">like</span>
+        <div id='detail-title'> Noodle </div>
+        <div id='detail-desc'>Myeondong Kyoja</div>
+        <div id='detail-comment'>Noodle price 9,000KRW </div>
+        <!-- <span class="badge badge-light">like</span> -->
+        <button class="btn btn-light" onclick="like()">Like</button>
+        <span id="likes"> 0 </span>
         <!-- <div id="detail-category"></div> -->
 
     </div>
