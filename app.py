@@ -13,11 +13,12 @@ def home():
 # API
 @app.route('/api/likes', methods=['POST'])
 def write_review():
+    print(request.form)
     category = request.form['category']
     like = db.categories.find_one({'name': category},{'_id':0})['like']
     db.categories.update_one({'name':category}, {'$set':{'like':like+1}})
     print(category + ' like ' + str(like+1))
-    return jsonify({'result': 'success', 'msg': 'review success!'})
+    return jsonify({'result': 'success', 'msg': 'review success!', 'like': like+1})
 
 @app.route('/api/likes', methods=['get'])
 def get_like():
