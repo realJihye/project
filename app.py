@@ -27,6 +27,11 @@ def get_like():
     like = db.categories.find_one({'name': category}, {'_id':0})['like']
     return jsonify({'result':'success', 'like': like})
 
+@app.route('/api/categories', methods=['get'])
+def categories():
+    c_list = list(db.categories.find({},{'_id':0}).sort('like' , -1))
+    return jsonify({'result':'success', 'c_list': c_list})
+
 
 if __name__ == '__main__':
     app.run('0.0.0.0', port=5000, debug=True)

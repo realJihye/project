@@ -28,6 +28,10 @@
     <link href="https://fonts.googleapis.com/css2?family=Merriweather:ital@0;1&display=swap" rel="stylesheet">
 
     <style>
+
+        #hot-list {
+            font-size: small;
+        }
         .form-inline {
             margin: auto;
         }
@@ -63,15 +67,14 @@
         }
 
         #detail-desc {
-            color:white; 
+            color: white;
             font-size: 15px;
         }
 
         #detail-comment {
             font-size: 20px;
-            color:blanchedalmond; 
+            color: blanchedalmond;
         }
-
     </style>
 
     <script>
@@ -123,7 +126,7 @@
         let comment = {
             'Noodle': 'Jihye Comment : the restaurant’s signature Kimchi can be too spicy and strong for you. Baby-size steamed rice, and extra noodles are unlimted ',
             'Bicycle': 'Jihye Comment : Riding a bike along the riverside is one of my favorite thing in Seoul. I almost go there on weekend mornings to avoid crowds.',
-            'Museum': 'Jihye Comment : a modern art gallery called MOMA. this place is close to Buckchon hanok village',
+            'Museum': 'Jihye Comment : a modern art gallery called MOMA. Buckchon hanok village is very close',
             'Hanok': 'Jihye Comment : get a nice hanbok, a Korean tranditional dress and be the princess',
             'Spa': 'Jihye Comment : Please try it for me if you are find with a public bath (I’ve never tried here!)',
             'Chicken': 'Jihye Comment : 10 out of 10 ! I think this chicken brand is the one of the best Korean fried Chicken. Sweet and Salty Perfect! Yum!',
@@ -141,17 +144,39 @@
         }
 
         function add_tags() {
+            $('#hot-list').empty();
             $('.tag-wrapper').empty();
-            for (let i = 0; i < tags.length; i++) {
-                if (i % 2) {
-                    tag_span_html = '<button type="button" class="btn btn-light" onclick="show_detail(\'' + tags[i] + '\')">#' + tags[i] + '</button>'
-                } else {
-                    tag_span_html = '<button type="button" class="btn btn-dark" onclick="show_detail(\'' + tags[i] + '\')">#' + tags[i] + '</button>'
+            $.ajax({
+                type: "get",
+                url: "/api/categories",
+                success: function (response) {
+                    let c_list = response['c_list'];
+                    for (let i = 0; i < c_list.length; i++) {
+                        let item = c_list[i];
+                        let name = item['name'];
+                        if (i % 2) {
+                            tag_span_html = '<button type="button" class="btn btn-light" onclick="show_detail(\'' + name + '\')">#' + name + '</button>'
+                        } else {
+                            tag_span_html = '<button type="button" class="btn btn-dark" onclick="show_detail(\'' + name + '\')">#' + name + '</button>'
+                        }
+                        $('.tag-wrapper').append(tag_span_html);
+                       
+                        let temp = `<li>${name}</li>`;
+                        $("#hot-list").append(temp);
+                    }
                 }
-                $('.tag-wrapper').append(tag_span_html);
+            });
+            // for (let i = 0; i < tags.length; i++) {
+            //     if (i % 2) {
+            //         tag_span_html = '<button type="button" class="btn btn-light" onclick="show_detail(\'' + tags[i] + '\')">#' + tags[i] + '</button>'
+            //     } else {
+            //         tag_span_html = '<button type="button" class="btn btn-dark" onclick="show_detail(\'' + tags[i] + '\')">#' + tags[i] + '</button>'
+            //     }
+            //     $('.tag-wrapper').append(tag_span_html);
 
-            }
+            // }
         }
+
 
         function show_detail(category) {
             // not showing -> show detail
@@ -194,10 +219,27 @@
 
         }
 
+
+
+        // function like(category) {
+        //     console.log('post /api/likes', category)
+        //     $.ajax({
+        //         type: "post",
+        //         url: "/api/likes",
+        //         data: { 'category': category },
+        //         success: function (response) {
+        //             console.log(response)
+        //             $('#likes').text(response['like'])
+        //         }
+        //     });
+
+        // }
+
+
         function search() {
             let temp = $('#text-input').val()
-            if (temp != '') { 
-                alert('Hello world! This is Seoul for you. Jihye has collected her favorite spots in Seoul. You can go to google map if you click images too!  Hope this info finds you well.')    
+            if (temp != '') {
+                alert('Hello world! This is Seoul for you. Jihye has collected her favorite spots in Seoul. You can go to google map if you click images too!  Hope this info finds you well.')
                 // 공백이 아닐경우 alert 을 띄워라
             }
 
@@ -211,12 +253,23 @@
 <body>
     <br />
     <h1>Seoul For You</h1>
+
+ 
     <br />
 
     <div>
+       
         <nav class="navbar navbar-light">
+            Real time hot list
+            <ol id="hot-list">
+                <li></li>
+                <li></li>
+                <li></li>
+            </ol>
             <form class="form-inline">
-                <input id="text-input" class="form-control mr-sm-2" type="Search" placeholder="What's up?" aria-label="Search">
+               
+                <input id="text-input" class="form-control mr-sm-2" type="Search" placeholder="What's up?"
+                    aria-label="Search">
                 <button type="button" onclick="search()" class="btn btn-light">Search</button>
             </form>
         </nav>
